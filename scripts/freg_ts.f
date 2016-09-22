@@ -108,7 +108,8 @@ c        include '/usr/local/include/netcdf.inc'
              if(tt>0.and.tt.le.ett)then
                 flngth=
      &         real(dist(ird,flon(tt,ii,1:ird),flat(tt,ii,1:ird)))
-                print*, flngth
+                print*, rd, flngth
+                print*, flat(tt,ii,1:ird)
              end if
             end do
            end do
