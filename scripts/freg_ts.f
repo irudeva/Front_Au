@@ -16,17 +16,20 @@
       	 implicit none
 c        include '/usr/local/include/netcdf.inc'
 
-	       character*100 fin,Din,ftrk,fout,fcdl,fnc,HS*2,ssn*3
-	       integer	sy,ey,sm,em,sd,ed,y,m,d,scy,scm,scd,sch,osy,osm,osd
+	       character*100 fin,Din,ftrk,fout,HS*2,ssn*3
+	       integer	sy,ey,sm,em,sd,ed,y,m,d,osy,osm,osd
 	       integer,dimension(1000):: cy,cm,cd,ch,k
 	       real,dimension(1000):: lon,lat,flen,mdv,sdv,nrd
 
 	       real r,reglon(2),reglat(2), flngth
          real*8 dist
+         integer treg, nreg
+         real mlat,mlon
 
 	       integer iy,iiy,id,im,ih,in
 	       real rd
-	       real,dimension(2500,100,1000):: flon,flat
+c         real,dimension(2500,100,1000):: flon,flat
+         real,dimension(1000):: flon,flat
 	       integer ird,nn,ii,ij,tt,ntt,ett
 
          real w,ny
@@ -62,6 +65,10 @@ c        include '/usr/local/include/netcdf.inc'
 
          call convtime(ey,em,ed,1800,ett,osy,osm,osd)
 
+         nreg = 0
+         mlat = 0.
+         mlon = 0.
+
 
 !-------------------------------------------------------
 	       do 1 y=sy,ey
@@ -72,8 +79,7 @@ c        include '/usr/local/include/netcdf.inc'
           do
            read(11,*,end=333)
            read(11,'(11x,3i2,i5,28x,i4)')iy,im,id,ih,in
-           print *, iy,im,id,ih
-
+           
            if(y.lt.1999)then
             iiy=iy+1900
            elseif(y.ge.1999.and.y.le.2001)then
@@ -83,13 +89,13 @@ c        include '/usr/local/include/netcdf.inc'
            endif
 
 	         call convtime(iiy,im,id,ih,tt,osy,osm,osd)
-           print*, tt
 
            read(11,*)
            read(11,*)
            read(11,*)
 
            do ii=1,in
+            treg=0
             read(11,'(i3,43x,f8.3)')nn,rd
             if(nn/=ii)then
              write(*,'("!ERROR: ii.ne.nn")')
@@ -100,18 +106,30 @@ c        include '/usr/local/include/netcdf.inc'
             do ij=1,ird
              if(tt>0.and.tt.le.ett)then
               read(11,'(14x,2f8.2,9x,f9.3)')
-     &         flat(tt,ii,ij),flon(tt,ii,ij)
+     &         flat(ij),flon(ij)
              else
               read(11,*)
              endif
-
-             if(tt>0.and.tt.le.ett)then
-                flngth=
-     &         real(dist(ird,flon(tt,ii,1:ird),flat(tt,ii,1:ird)))
-                print*, rd, flngth
-                print*, flat(tt,ii,1:ird)
-             end if
             end do
+
+            if(tt>0.and.tt.le.ett)then
+             flngth=
+     &         real(dist(ird,flon(1:ird),flat(1:ird)))
+             if(flngth.ge.500.)then
+              do ij=1,ird
+               if(flat(ij).ge.reglat(1).and.flat(ij).le.reglat(2))then
+                if(flon(ij).ge.reglon(1).and.flon(ij).le.reglon(2))then
+                 treg=1
+                end if
+               end if
+              end do
+             end if
+            end if
+            if(treg==1)then
+             nreg = nreg+1
+             mlat = mlat+flat(ird)
+             mlon = mlon+flon(ird)
+            end if
            end do
           end do
 
@@ -121,7 +139,8 @@ c        include '/usr/local/include/netcdf.inc'
 
        write(*,*) 'Output: ', fout
        open(21, file=fout,action='write')
-       write(21,'(a," ",i4, "  read")')ssn,ey
+       write(21,'(a," ",i4,i6,2f10.1)')
+     &   ssn,ey, nreg, mlat/float(nreg),mlon/float(nreg)
        close(21)
 
 	     end

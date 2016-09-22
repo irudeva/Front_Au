@@ -11,22 +11,26 @@ for nh in 0
 do
 :
 fy=1979
-y=1980
-ey=1981
+y=1979
+ey=2016
 #Region
 lon=(135 160)
-lat=( 20 70)
+lat=(-70 -20)   #from south to north!!!
 
-fres=~/work/Projects/Front/Australia/output/freq_ts/${d}${lev}.${ssn[$sn]}$y-$ey.${HS[$nh]}.dat
-if [ -f "$fres" ]; then
-  rm $fres; fi
+ssn=( "djf" "mam" "jja" "son" )
+for sn in  0
+do
+ fres[$sn]=~/work/Projects/Front/Australia/output/freq_ts/${d}${lev}.${ssn[$sn]}$y-$ey.${HS[$nh]}.dat
+ if [ -f "${fres[$sn]}" ]; then
+  rm ${fres[$sn]}; fi
+done
 
 
 while [ $y -le $ey ]
 do
 ssn=( "djf" "mam" "jja" "son" )
-#for sn in  {0..3}
 for sn in  0
+#for sn in  0
 do
 if [[ $sn -eq 0 ]];then
 #cy=$[$fy+1]
@@ -42,6 +46,9 @@ elif [ `expr $cy % 4 ` -eq 0 ]; then
   edate=${cy}0229
 else
   edate=${cy}0228
+  if [ ${cy} -gt $ey ];then
+    continue
+  fi
 fi
 #edate=${cy}0229
 elif [ $sn -eq 1 ];then
@@ -72,7 +79,7 @@ ${lon[0]} ${lon[1]}
 ${lat[0]} ${lat[1]}
 mark
 
-cat $fout >>  "${fres}"
+cat $fout >>  "${fres[$sn]}"
 rm $fout
 :
 done
