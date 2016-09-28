@@ -4,25 +4,30 @@
 
 begin
 
-d="ncep"
-lev="slp"
+d="erain"
+lev="10"
+reg="SA"
+reg_lon=(/135, 160/)+"E"
+reg_lat=(/"25","45"/)+"S"
 npts = 10
 col = (/"black","red","orange","blue","paleturquoise","green","olivedrab"/)
 mon = (/"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"/)
-var = (/"ncyc_anal","slp","dp","radius","n70c"/)
-var_title = (/"Ncyc/analysis","av slp","av dp","av radius","av N time steps > 70N"/)
-varn = (/2,3,7,9,15/)
+ssn = (/"djf","mam","jja","son"/)
+var = (/"lat","lon"/)
+var_title = (/"latitude","longitude"/)
+varn = (/2,3/)
 
 y1=1979
 y2=2016
 
-data=new((/y2-y1+1,12/),float)
+data=new((/y2-y1+1,dimsizes(varn)/),float)
 data@_FillValue = -9999.0
+listyr=data(:,0)
 pltarry=new((/2,dimsizes(data(:,0))/),typeof(data),data@_FillValue)
 
- do iv = 0,4
-  do loc  = 0,0
-   fout = "../../output/trkmonmean/"+var(iv)+"."+lev+"."+d+"."+y1+"-"+y2
+ do iv = 0,1
+  do is  = 0,3
+   fout = "../output/freq_ts/"+var(iv)+"."+d+lev+"."+ssn(is)+y1+"-"+y2+"."+reg
 
    data=data@_FillValue
 
@@ -41,40 +46,41 @@ pltarry=new((/2,dimsizes(data(:,0))/),typeof(data),data@_FillValue)
 
 ; *** read data ******************************************************************
 
-     do y = y1,y2
 
-      fin = "../../output/trkmonmean/av."+lev+"."+d+"."+y+"N"
+      fin = "../output/freq_ts/"+d+lev+"."+ssn(is)+y1+"-"+y2+"."+reg+".dat"
       if (fileexists(fin)) then
       print("Data from "+fin)
-       getvar = readAsciiTable (fin,21,"float",1)
-       data(y-y1,:dimsizes(getvar(:,varn(iv)))-1) = getvar(:,varn(iv))
-; fill the last values with FillValue due to incomplete data
-       if(y.eq.2016)then
-        data(y-y1,8:)= data@_FillValue
-       end if
+       getvar = readAsciiTable (fin,4,"float",0)
+
+       listyr(:dimsizes(getvar(:,1))-1) = getvar(:,0)
+       data(:dimsizes(getvar(:,1))-1,iv)   = getvar(:,varn(iv))
 
        delete(getvar)
 
        end if  ; if filein exist
-      end do  ; k
+
+       ;print(listyr)
+       ;print(data(:,iv))
+
 
 ;*** XY plot *************************************************************************
 
-     do m=0,11
 ; regression
-      rc = regline(yr-y1+1, data(:,m))
-      rc@units = "6h time step/yr"
-      pltarry(0,:)=data(:,m)
+      rc = regline(yr-y1+1, data(:,iv))
+      rc@units = "NPF/yr"
+      pltarry(0,:)=data(:,iv)
       pltarry(1,:)=rc*((yr-y1+1)-rc@xave)+rc@yave
 
-      res@tiMainString = var_title(iv)+"  "+mon(m)+" "+y1+" - "+y2
+      res@tiMainString = var_title(iv)+"  "+ssn(is)+" "+y1+" - "+y2
+
+      res@gsnCenterString    = "("+reg_lat(0)+" - "+reg_lat(1)+"; "+reg_lon(0)+" - "+reg_lon(1)+")"
+
 
       plot = gsn_csm_xy(wks,yr,pltarry,res)
 ;---Drawing the plot will draw the attached polylines and markers.
 ;      draw(plot)
 ;      frame(wks)
-      print ("ok")
-  end do
+
 
 
 ; ***  End plotting  ***************************************************************

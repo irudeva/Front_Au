@@ -14,13 +14,15 @@ fy=1979
 y=1979
 ey=2016
 #Region
+reg="SA"
 lon=(135 160)
-lat=(-70 -20)   #from south to north!!!
+lat=(-45 -25)   #from south to north!!!
 
 ssn=( "djf" "mam" "jja" "son" )
-for sn in  0
+for sn in 0 1 2 3
 do
- fres[$sn]=~/work/Projects/Front/Australia/output/freq_ts/${d}${lev}.${ssn[$sn]}$y-$ey.${HS[$nh]}.dat
+ fres[$sn]=~/work/Projects/Front/Australia/output/freq_ts/${d}${lev}.${ssn[$sn]}$y-$ey.${reg}.dat
+ echo ${fres[$sn]}
  if [ -f "${fres[$sn]}" ]; then
   rm ${fres[$sn]}; fi
 done
@@ -28,8 +30,7 @@ done
 
 while [ $y -le $ey ]
 do
-ssn=( "djf" "mam" "jja" "son" )
-for sn in  0
+for sn in  0 1 2 3
 #for sn in  0
 do
 if [[ $sn -eq 0 ]];then
@@ -65,7 +66,7 @@ sdate=${cy}0901
 edate=${cy}1130
 fi
 echo ${ssn[$sn]}
-fout=~/work/Projects/Front/Australia/output/freq_ts/${d}${lev}.${ssn[$sn]}$cy.${HS[$nh]}.dat
+fout=~/work/Projects/Front/Australia/output/freq_ts/${d}${lev}.${ssn[$sn]}$cy.${reg}.dat
 :
 echo $fout
 ./$prog <<mark

@@ -79,11 +79,11 @@ c         real,dimension(2500,100,1000):: flon,flat
           do
            read(11,*,end=333)
            read(11,'(11x,3i2,i5,28x,i4)')iy,im,id,ih,in
-           
+
            if(y.lt.1999)then
             iiy=iy+1900
            elseif(y.ge.1999.and.y.le.2001)then
-            iy=iy+1980
+            iiy=iy+1980
            else
             iiy=iy+2000
            endif
