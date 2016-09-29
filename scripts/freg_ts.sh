@@ -14,9 +14,14 @@ fy=1979
 y=1979
 ey=2016
 #Region
-reg="SA"
-lon=(135 160)
-lat=(-45 -25)   #from south to north!!!
+#reg="SA"
+#lon=(135 160)
+#lat=(-45 -25)   #from south to north!!!
+
+reg="SH"
+lon=(0 360)
+lat=(-70 -20)   #from south to north!!!
+
 
 ssn=( "djf" "mam" "jja" "son" )
 for sn in 0 1 2 3

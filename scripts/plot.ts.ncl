@@ -6,10 +6,15 @@ begin
 
 d="erain"
 lev="10"
-reg="SA"
-reg_lon=(/135, 160/)+"E"
-reg_lat=(/"25","45"/)+"S"
-npts = 10
+
+;reg="SA"
+;reg_lon=(/135, 160/)+"E"
+;reg_lat=(/"25","45"/)+"S"
+
+reg="SH"
+reg_lon=(/0, 360/)+"E"
+reg_lat=(/"20","70"/)+"S"
+
 col = (/"black","red","orange","blue","paleturquoise","green","olivedrab"/)
 mon = (/"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"/)
 ssn = (/"djf","mam","jja","son"/)
