@@ -10,7 +10,7 @@
 	      end module grid
 
 
-        program freg_TS
+        program bandstat
 	       use grid
 
       	 implicit none
@@ -24,7 +24,7 @@ c        include '/usr/local/include/netcdf.inc'
 	       real r,reglon(2),reglat(2), flngth
          real*8 dist
          integer treg, nreg
-         real mlat,mlon
+         real mlat,mlon,mlen
 
 	       integer iy,iiy,id,im,ih,in
 	       real rd
@@ -38,7 +38,7 @@ c         real,dimension(2500,100,1000):: flon,flat
 	       character*80 fmt
 
 
-         write(*,*) 'freq_ts start'
+         write(*,*) 'bandstat started'
 
 	       read(*,'(a100)') Din
 	       read(*,'(a)') HS
@@ -68,6 +68,7 @@ c         real,dimension(2500,100,1000):: flon,flat
          nreg = 0
          mlat = 0.
          mlon = 0.
+         mlen = 0.
 
 
 !-------------------------------------------------------
@@ -129,6 +130,7 @@ c         real,dimension(2500,100,1000):: flon,flat
              nreg = nreg+1
              mlat = mlat+flat(ird)
              mlon = mlon+flon(ird)
+             mlen = mlen+flngth
             end if
            end do
           end do
@@ -139,8 +141,8 @@ c         real,dimension(2500,100,1000):: flon,flat
 
        write(*,*) 'Output: ', fout
        open(21, file=fout,action='write')
-       write(21,'(a," ",i4,i6,2f10.1)')
-     &   ssn,ey, nreg, mlat/float(nreg),mlon/float(nreg)
+       write(21,'(a," ",i4,i6,3f10.1)')
+     & ssn,ey, nreg, mlat/float(nreg),mlon/float(nreg),mlen/float(nreg)
        close(21)
 
 	     end
