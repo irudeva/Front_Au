@@ -17,7 +17,6 @@ ey=2016
 for nh in 0
 do
 
-reg=( "SH" "SA" "SEP")
 
 ssn=( "djf" "mam" "jja" "son" )
 
@@ -32,7 +31,9 @@ ssn=( "djf" "mam" "jja" "son" )
 #lon=(0 360)
 #lat=(-70 -20)   #from south to north!!!
 
-for nr in 0 1 2
+reg=( "SH" "SA" "SEP")
+
+for nr in 1
 do
   echo ${reg[$nr]}
 
@@ -56,7 +57,7 @@ do
 
 for sn in 0 1 2 3
 do
- fres[$sn]=~/work/Projects/Front/Front_Au/output/bandstat/${d}${lev}.${ssn[$sn]}$sy-$ey.${reg}.$lat-$lat1.dat
+ fres[$sn]=~/work/Projects/Front/Front_Au/output/bandstat/${d}${lev}.${ssn[$sn]}$sy-$ey.${reg[$nr]}.$lat-$lat1.dat
  echo ${fres[$sn]}
  if [ -f "${fres[$sn]}" ]; then
   rm ${fres[$sn]}; fi
@@ -101,7 +102,7 @@ sdate=${cy}0901
 edate=${cy}1130
 fi
 echo ${ssn[$sn]}
-fout=~/work/Projects/Front/Front_Au/output/bandstat/${d}${lev}.${ssn[$sn]}$cy.${reg}.dat
+fout=~/work/Projects/Front/Front_Au/output/bandstat/${d}${lev}.${ssn[$sn]}$cy.${reg[$nr]}.dat
 :
 echo $fout
 echo 'start prog'

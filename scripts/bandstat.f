@@ -166,10 +166,10 @@ c         real,dimension(2500,100,1000):: flon,flat
 
 
        	if(sy>y.or.(sy==y.and.sm>m).or.(sy==y.and.sm==m.and.sd>d))then
-       	 write(*,'("!!!CHECK DATES_0:")')
-       	 write(*,'("Starting date ",i4,2i2)')sy,sm,sd
-       	 write(*,'("Current date ",i4,2i2)')y,m,d
-       !	 stop
+       	 !write(*,'("!!!CHECK DATES_0:")')
+       	 !write(*,'("Starting date ",i4,2i2)')sy,sm,sd
+       	 !write(*,'("Current date ",i4,2i2)')y,m,d
+       	 !stop
        	tt=-1
        	return
        	endif
