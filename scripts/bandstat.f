@@ -248,7 +248,7 @@ c         real,dimension(2500,100,1000):: flon,flat
 
         	do n=1,k-1
         	if(lon(n)==lon(n+1))then
-        	 dist=dist+abs(lat(n+1)-lat(n))*pi/180.
+        	 dist=dist+abs(lat(n+1)-lat(n))
         	elseif(lat(n+1)==lat(n))then
         	 dist=dist+
      &      acos(cos(dlat(n))**2*(cos(dlon(n+1)-dlon(n))-1.)+1.)

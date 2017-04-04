@@ -7,13 +7,13 @@ begin
 d="erain"
 lev="10"
 
-;reg="SA"
-;reg_lon=(/135, 160/)+"E"
-;reg_lat=(/"25","45"/)+"S"
+reg="SA"
+reg_lon=(/135, 160/)+"E"
+reg_lat=(/"25","45"/)+"S"
 
-reg="SH"
-reg_lon=(/0, 360/)+"E"
-reg_lat=(/"20","70"/)+"S"
+;reg="SH"
+;reg_lon=(/0, 360/)+"E"
+;reg_lat=(/"20","70"/)+"S"
 
 col = (/"black","red","orange","blue","paleturquoise","green","olivedrab"/)
 mon = (/"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"/)
@@ -37,7 +37,7 @@ pltarry=new((/2,dimsizes(data(:,0))/),typeof(data),data@_FillValue)
    data=data@_FillValue
 
 ; ***  Plotting  *******************************************************************
-  wks  = gsn_open_wks("ps",fout)
+  wks  = gsn_open_wks("png",fout)
 
   res                    = True
 
